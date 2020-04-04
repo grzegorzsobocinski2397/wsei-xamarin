@@ -22,7 +22,7 @@ namespace AirMonitor.Views
 		/// </summary>
 		private void NavigateToHomePage(object sender, EventArgs e)
 		{
-			Navigation.PushAsync(new HomePage());
+			Navigation.PushAsync(new DetailsPage());
 		}
 	}
 }
