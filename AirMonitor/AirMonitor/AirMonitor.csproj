@@ -22,13 +22,10 @@
     <EmbeddedResource Remove="MainPage.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Resources\Styles.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Styles.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Update="Resources\Colors.xaml">
+      <LastGenOutput>Styles.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Styles.xaml">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Styles.Designer.cs</LastGenOutput>
