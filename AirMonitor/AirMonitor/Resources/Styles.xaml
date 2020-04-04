@@ -31,7 +31,7 @@
         <Setter Property="FontSize"  Value="32"/>
     </Style>
 
-    <!-- Main frame of the window. -->
+    <!-- Circle information box. -->
     <Style TargetType="Frame" x:Key="FrameElement">
         <Setter Property="Padding"  Value="0"/>
         <Setter Property="CornerRadius"  Value="50"/>
@@ -41,7 +41,7 @@
         <Setter Property="WidthRequest"  Value="100"/>
         <Setter Property="HasShadow"  Value="False"/>
         <Setter Property="BorderColor"  Value="{StaticResource PrimaryBorder}"/>
-        <Setter Property="BackgroundColor"  Value="{StaticResource BackgroundColor}"/>
+        <Setter Property="BackgroundColor"  Value="{StaticResource ButtonColor}"/>
     </Style>
     
     <!-- A line dividing content horizontally. -->
