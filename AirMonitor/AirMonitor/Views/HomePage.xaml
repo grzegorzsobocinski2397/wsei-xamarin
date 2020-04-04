@@ -10,7 +10,7 @@
             <Button Text="Go to Details"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand"
-                    Clicked="NavigateToHomePage"/>
+                Command="{Binding NavigateToDetailsCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

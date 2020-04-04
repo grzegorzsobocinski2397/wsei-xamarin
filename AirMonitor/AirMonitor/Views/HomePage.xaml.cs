@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using AirMonitor.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,14 +10,8 @@ namespace AirMonitor.Views
 		public HomePage()
 		{
 			InitializeComponent();
-		}
 
-		/// <summary>
-		/// Move the user to the Home Page.
-		/// </summary>
-		private void NavigateToHomePage(object sender, EventArgs e)
-		{
-			Navigation.PushAsync(new DetailsPage());
+			BindingContext = new HomeViewModel(Navigation);
 		}
 	}
 }
