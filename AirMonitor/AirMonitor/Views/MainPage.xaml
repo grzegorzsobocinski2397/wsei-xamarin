@@ -45,9 +45,7 @@
                 </Frame>
                 <Label
                     Text="Świetna jakość!"
-                    FontSize="20"
-                    TextColor="Black"
-                    FontAttributes="Bold"
+                    Style="{StaticResource LabelStyle}"
                     HorizontalTextAlignment="Center"/>
                 <Label
                     Text="Możesz bezpiecznie wyjść z domu bez swojej maski anty-smogowej i nie bać się o swoje zdrowie."
@@ -132,8 +130,7 @@
                         <StackLayout>
                             <Label
                                 Text="95%"
-                                FontSize="20"
-                                TextColor="Black" />
+                                Style="{StaticResource LabelStyle}"/>
                             <Slider
                                 Value="0.95"
                                 MaximumTrackColor="Gray"
@@ -151,9 +148,8 @@
                     <controls:ContentWithHeader.ControlContent>
                         <StackLayout>
                             <Label
-                                Text="1026 hPa"
-                                FontSize="20"
-                                TextColor="Black" />
+                                Style="{StaticResource LabelStyle}"
+                                Text="1026 hPa"/>
                             <!-- Set Maximum before Minimum in Slider -->
                             <Slider
                                 Maximum="1100"
