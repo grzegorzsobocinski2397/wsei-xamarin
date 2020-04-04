@@ -7,7 +7,9 @@
              x:Class="AirMonitor.App">
     <Application.Resources>
         <ResourceDictionary>
+            <!-- Order is important. -->
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

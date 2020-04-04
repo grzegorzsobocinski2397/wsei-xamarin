@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <Style TargetType="Label">
-        <Setter Property="TextColor"  Value="Black"/>
+        <Setter Property="TextColor"  Value="{StaticResource PrimaryFontColor}"/>
         <Setter Property="FontAttributes"  Value="Bold"/>
         <Setter Property="FontSize"  Value="20"/>
     </Style>
@@ -17,7 +17,7 @@
 
     <!-- Main span elements that act as values. -->
     <Style TargetType="Span">
-        <Setter Property="TextColor"  Value="Black"/>
+        <Setter Property="TextColor"  Value="{StaticResource PrimaryFontColor}"/>
         <Setter Property="FontSize"  Value="20"/>
     </Style>
 
@@ -40,15 +40,15 @@
         <Setter Property="HeightRequest"  Value="100"/>
         <Setter Property="WidthRequest"  Value="100"/>
         <Setter Property="HasShadow"  Value="False"/>
-        <Setter Property="BorderColor"  Value="Gray"/>
-        <Setter Property="BackgroundColor"  Value="#33f069"/>
+        <Setter Property="BorderColor"  Value="{StaticResource PrimaryBorder}"/>
+        <Setter Property="BackgroundColor"  Value="{StaticResource BackgroundColor}"/>
     </Style>
     
     <!-- A line dividing content horizontally. -->
     <Style TargetType="BoxView" x:Key="HorizontalBoxView">
         <Setter Property="HeightRequest"  Value="1"/>
         <Setter Property="HorizontalOptions"  Value="Fill"/>
-        <Setter Property="BackgroundColor"  Value="LightGray"/>
+        <Setter Property="BackgroundColor"  Value="{StaticResource LineColor}"/>
     </Style>
 
     <!-- A line dividing content vertically. -->
@@ -56,14 +56,14 @@
         <Setter Property="WidthRequest"  Value="1"/>
         <Setter Property="HorizontalOptions"  Value="Center"/>
         <Setter Property="VerticalOptions"  Value="Fill"/>
-        <Setter Property="BackgroundColor"  Value="LightGray"/>
+        <Setter Property="BackgroundColor"  Value="{StaticResource LineColor}"/>
     </Style>
 
     <!-- Slider element. -->
     <Style TargetType="Slider" x:Key="SliderElement">
-        <Setter Property="MaximumTrackColor"  Value="Gray"/>
-        <Setter Property="MinimumTrackColor"  Value="CornflowerBlue"/>
-        <Setter Property="ThumbColor"  Value="CornflowerBlue"/>
+        <Setter Property="MaximumTrackColor"  Value="{StaticResource PrimaryBorder}"/>
+        <Setter Property="MinimumTrackColor"  Value="{StaticResource PrimaryBlue}"/>
+        <Setter Property="ThumbColor"  Value="{StaticResource PrimaryBlue}"/>
     </Style>
 
     <Style TargetType="ImageButton" x:Key="ImageButton">
