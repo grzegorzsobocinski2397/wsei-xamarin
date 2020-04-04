@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace AirMonitor.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class TabbedPage : ContentPage
+	public partial class TabPage : TabbedPage
 	{
-		public TabbedPage()
+		public TabPage()
 		{
 			InitializeComponent();
 		}
