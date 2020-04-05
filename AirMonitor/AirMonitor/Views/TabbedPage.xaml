@@ -9,7 +9,7 @@
              x:Class="AirMonitor.Views.TabPage"
             androidSpecific:TabbedPage.ToolbarPlacement="Bottom">
 
-    <NavigationPage Title="Home">
+    <NavigationPage Title="Home" IconImageSource="schedule.png">
         <x:Arguments>
             <views:HomePage />
         </x:Arguments>

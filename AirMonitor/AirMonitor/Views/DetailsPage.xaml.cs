@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AirMonitor.ViewModels;
+using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 
@@ -12,6 +13,8 @@ namespace AirMonitor.Views
         public DetailsPage()
         {
             InitializeComponent();
+
+            BindingContext = new DetailsViewModel();
         }
 
         private void Help_Clicked(object sender, EventArgs e)

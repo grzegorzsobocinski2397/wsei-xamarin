@@ -20,7 +20,7 @@
                             <FormattedString>
                                 <Span
                                     Style="{StaticResource Span--Large}"
-                                    Text="56"/>
+                                    Text="{Binding Caqi}"/>
                                 <Span
                                     Text="{x:Static x:Environment.NewLine}"/>
                                 <Span
@@ -51,13 +51,11 @@
                             <Label>
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span
-                                            Text="34"/>
+                                        <Span Text="{Binding PM25.Value}"/>
                                         <Span
                                             Text=" mg/m3 "
                                             Style="{StaticResource Span--Small}"/>
-                                        <Span
-                                            Text="(137%)"/>
+                                        <Span Text="{Binding PM25.Percentage, StringFormat='({0}%)'}"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -76,13 +74,11 @@
                             <Label>
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span
-                                            Text="67"/>
+                                        <Span Text="{Binding PM10.Value}"/>
                                         <Span
                                             Text=" mg/m3 "
                                             Style="{StaticResource Span--Small}"/>
-                                        <Span
-                                            Text="(135%)"/>
+                                        <Span Text="{Binding PM10.Percentage, StringFormat='({0}%)'}"/>
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
