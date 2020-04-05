@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="AirMonitor.Views.DetailsPage"
-             xmlns:controls="clr-namespace:AirMonitor.Views.Controls"
+             xmlns:controls="clr-namespace:AirMonitor.Views.Controls" xmlns:local="clr-namespace:AirMonitor"
              BackgroundColor="{StaticResource BackgroundColor}">
 
     <ScrollView>
@@ -91,9 +91,9 @@
                 <controls:ContentWithHeader Title="Wilgotność">
                     <controls:ContentWithHeader.ControlContent>
                         <StackLayout>
-                            <Label Text="95%"/>
+                            <Label Text="{Binding MoistureLevel, Converter={local:NumberToPercentageConverter}}"/>
                             <Slider
-                                Value="0.95"
+                                Value="{Binding MoistureLevel}"
                                Style="{StaticResource SliderElement}"/>
                         </StackLayout>
                     </controls:ContentWithHeader.ControlContent>
@@ -103,12 +103,12 @@
                 <controls:ContentWithHeader Title="Ciśnienie">
                     <controls:ContentWithHeader.ControlContent>
                         <StackLayout>
-                            <Label Text="1026 hPa"/>
+                            <Label Text="{Binding PressureLevel, StringFormat='{0} hPa'}"/>
                             <!-- Set Maximum before Minimum in Slider -->
                             <Slider
                                 Maximum="1100"
                                 Minimum="900"
-                                Value="1026"
+                                Value="{Binding PressureLevel}"
                                 Style="{StaticResource SliderElement}"/>
                         </StackLayout>
                     </controls:ContentWithHeader.ControlContent>
