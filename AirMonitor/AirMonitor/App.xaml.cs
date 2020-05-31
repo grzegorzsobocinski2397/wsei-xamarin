@@ -25,6 +25,10 @@ namespace AirMonitor
 		/// Endpoint for the nearest station. Provided in the config.json
 		/// </summary>
 		public static string ApiNearestUrl { get; private set; }
+		/// <summary>
+		/// Endpoint for the measurements based on the station id. Provided in the config.json
+		/// </summary>
+		public static string ApiMeasurementsUrl { get; private set; }
 
 		public App()
 		{
@@ -62,6 +66,7 @@ namespace AirMonitor
 					ApiKey = dynamicJson["apiKey"].Value<string>();
 					ApiUrl = dynamicJson["apiUrl"].Value<string>();
 					ApiNearestUrl = dynamicJson["apiNearest"].Value<string>();
+					ApiMeasurementsUrl = dynamicJson["apiMeasurements"].Value<string>();
 				}
 			}
 		}
