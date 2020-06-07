@@ -14,59 +14,58 @@
                 Padding="24"
                 Spacing="12">
                 <Frame
-                  Style="{StaticResource FrameElement}" >
+                  Style="{StaticResource FrameElement}">
                     <Label Style="{StaticResource  Label--Centered}">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span
                                     Style="{StaticResource Span--Large}"
-                                    Text="{Binding Caqi}"/>
+                                    Text="{Binding Caqi}" />
                                 <Span
-                                    Text="{x:Static x:Environment.NewLine}"/>
+                                    Text="{x:Static x:Environment.NewLine}" />
                                 <Span
                                     Text="CAQI"
                                     FontSize="12"
-                                    TextColor="DarkSlateGray"/>
+                                    TextColor="DarkSlateGray" />
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
                 </Frame>
                 <Label
-                    Text="Świetna jakość!"
-                    HorizontalTextAlignment="Center"/>
+                    Text="{Binding CaqiDescription}"
+                    HorizontalTextAlignment="Center" />
                 <Label
-                    Text="Możesz bezpiecznie wyjść z domu bez swojej maski anty-smogowej i nie bać się o swoje zdrowie."
+                    Text="{Binding CaqiLabel}"
                     FontSize="14" />
 
-                <BoxView Style="{StaticResource HorizontalBoxView}"/>
+                <BoxView Style="{StaticResource HorizontalBoxView}" />
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <controls:ContentWithHeader Title="PM 2,5">
                         <controls:ContentWithHeader.ControlContent>
                             <Label>
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="{Binding PM25.Value}"/>
+                                        <Span Text="{Binding PM25.Value}" />
                                         <Span
                                             Text=" mg/m3 "
-                                            Style="{StaticResource Span--Small}"/>
-                                        <Span Text="{Binding PM25.Percentage, StringFormat='({0}%)'}"/>
+                                            Style="{StaticResource Span--Small}" />
+                                        <Span Text="{Binding PM25.Percentage, StringFormat='({0}%)'}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
                         </controls:ContentWithHeader.ControlContent>
                     </controls:ContentWithHeader>
-                
+
                     <BoxView
                         Grid.Column="1"
-                        Style="{StaticResource VerticalBoxView}"/>
-                    
-                    
+                        Style="{StaticResource VerticalBoxView}" />
+
                     <controls:ContentWithHeader
                         Title="PM 10"
                         Grid.Column="2">
@@ -74,11 +73,11 @@
                             <Label>
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="{Binding PM10.Value}"/>
+                                        <Span Text="{Binding PM10.Value}" />
                                         <Span
                                             Text=" mg/m3 "
-                                            Style="{StaticResource Span--Small}"/>
-                                        <Span Text="{Binding PM10.Percentage, StringFormat='({0}%)'}"/>
+                                            Style="{StaticResource Span--Small}" />
+                                        <Span Text="{Binding PM10.Percentage, StringFormat='({0}%)'}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -86,30 +85,29 @@
                     </controls:ContentWithHeader>
                 </Grid>
 
-
-                <BoxView Style="{StaticResource HorizontalBoxView}"/>
+                <BoxView Style="{StaticResource HorizontalBoxView}" />
                 <controls:ContentWithHeader Title="Wilgotność">
                     <controls:ContentWithHeader.ControlContent>
                         <StackLayout>
-                            <Label Text="{Binding MoistureLevel, Converter={local:NumberToPercentageConverter}}"/>
+                            <Label Text="{Binding MoistureLevel, Converter={local:NumberToPercentageConverter}}" />
                             <Slider
                                 Value="{Binding MoistureLevel}"
-                               Style="{StaticResource SliderElement}"/>
+                               Style="{StaticResource SliderElement}" />
                         </StackLayout>
                     </controls:ContentWithHeader.ControlContent>
                 </controls:ContentWithHeader>
 
-                <BoxView Style="{StaticResource HorizontalBoxView}"/>
+                <BoxView Style="{StaticResource HorizontalBoxView}" />
                 <controls:ContentWithHeader Title="Ciśnienie">
                     <controls:ContentWithHeader.ControlContent>
                         <StackLayout>
-                            <Label Text="{Binding PressureLevel, StringFormat='{0} hPa'}"/>
+                            <Label Text="{Binding PressureLevel, StringFormat='{0} hPa'}" />
                             <!-- Set Maximum before Minimum in Slider -->
                             <Slider
                                 Maximum="1100"
                                 Minimum="900"
                                 Value="{Binding PressureLevel}"
-                                Style="{StaticResource SliderElement}"/>
+                                Style="{StaticResource SliderElement}" />
                         </StackLayout>
                     </controls:ContentWithHeader.ControlContent>
                 </controls:ContentWithHeader>
@@ -118,8 +116,7 @@
             <ImageButton
                 Style="{StaticResource ImageButton}"
                 Source="baseline_help_outline_black_24.png"
-                Clicked="Help_Clicked"/>
+                Clicked="Help_Clicked" />
         </Grid>
     </ScrollView>
-
 </ContentPage>

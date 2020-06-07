@@ -1,10 +1,8 @@
 ﻿using AirMonitor.Models;
 using AirMonitor.Services;
-using AirMonitor.ViewModels.Base;
 using AirMonitor.Views;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -13,6 +11,11 @@ namespace AirMonitor.ViewModels
 	internal class HomeViewModel : BaseViewModel
 	{
 		#region Properties
+
+		/// <summary>
+		/// List of measurements for nearby stations.
+		/// </summary>
+		public List<Measurement> Measurements { get; private set; }
 
 		/// <summary>
 		/// Service responsible for sending requests to Airly endpoints.
@@ -24,11 +27,6 @@ namespace AirMonitor.ViewModels
 		/// </summary>
 		private readonly INavigation navigation;
 
-		/// <summary>
-		/// Command that will navigate the user to a Home Page.
-		/// </summary>
-		public ICommand NavigateToDetailsCommand { get; set; }
-
 		#endregion Properties
 
 		#region Constructor
@@ -38,11 +36,21 @@ namespace AirMonitor.ViewModels
 			this.navigation = navigation;
 
 			Initialize();
-
-			NavigateToDetailsCommand = new RelayCommand(() => NavigateToDetailsPage());
 		}
 
 		#endregion Constructor
+
+		#region Public Methods
+
+		/// <summary>
+		/// Move the user to Details page.
+		/// </summary>
+		public void NavigateToDetailsPage(Measurement measurement)
+		{
+			navigation.PushAsync(new DetailsPage(measurement));
+		}
+
+		#endregion Public Methods
 
 		#region Private Methods
 
@@ -51,9 +59,10 @@ namespace AirMonitor.ViewModels
 		/// </summary>
 		private async void Initialize()
 		{
-			var location = await GetLocation();
-			var stations = await GetStations(location);
-			var measurements = await GetMeasurements(stations);
+			Location location = await GetLocation();
+			IEnumerable<Station> stations = await GetStations(location);
+			IEnumerable<Measurement> measurements = await GetMeasurements(stations);
+			Measurements = new List<Measurement>(measurements);
 		}
 
 		/// <summary>
@@ -89,14 +98,6 @@ namespace AirMonitor.ViewModels
 			}
 
 			return measurements;
-		}
-
-		/// <summary>
-		/// Move the user to Details page.
-		/// </summary>
-		private void NavigateToDetailsPage()
-		{
-			navigation.PushAsync(new DetailsPage());
 		}
 
 		#endregion Private Methods

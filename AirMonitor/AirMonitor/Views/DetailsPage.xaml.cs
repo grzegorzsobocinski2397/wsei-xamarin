@@ -1,4 +1,5 @@
-﻿using AirMonitor.ViewModels;
+﻿using AirMonitor.Models;
+using AirMonitor.ViewModels;
 using System;
 using System.ComponentModel;
 using Xamarin.Forms;
@@ -10,11 +11,12 @@ namespace AirMonitor.Views
     [DesignTimeVisible(false)]
     public partial class DetailsPage : ContentPage
     {
-        public DetailsPage()
+        public DetailsPage(Measurement measurement)
         {
             InitializeComponent();
 
             BindingContext = new DetailsViewModel();
+            (BindingContext as DetailsViewModel).Measurement = measurement;
         }
 
         private void Help_Clicked(object sender, EventArgs e)
