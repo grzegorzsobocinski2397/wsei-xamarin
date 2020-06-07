@@ -9,3 +9,4 @@
 
 		public Station Station { get; set; }
 	}
+}
