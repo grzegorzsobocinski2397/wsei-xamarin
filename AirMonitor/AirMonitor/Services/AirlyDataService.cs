@@ -16,58 +16,67 @@ namespace AirMonitor.Services
 	public class AirlyDataService
 	{
 		/// <summary>
-		/// Send a request for measurements for specific station.
+		/// Send a request for measurements for a specific station.
 		/// </summary>
 		/// <param name="id">Id of the station.</param>
 		public async Task<Measurement> GetMeasurements(string id)
 		{
-			using (HttpClient client = new HttpClient())
+			using (HttpClient client = GetHttpClient())
 			{
-				Dictionary<string, string> queryString = new Dictionary<string, string>()
-				{  {"installationId", id } };
+				Dictionary<string, string> queryString = new Dictionary<string, string>() { { "installationId", id } };
 
-				client.BaseAddress = new Uri(App.ApiUrl);
+				string uri = CreateURI(App.ApiMeasurementsUrl, queryString);
+				HttpResponseMessage response = await client.GetAsync(uri);
 
-				string requestUri = QueryHelpers.AddQueryString(App.ApiMeasurementsUrl, queryString);
-
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-				client.DefaultRequestHeaders.Add("apikey", App.ApiKey);
-
-				HttpResponseMessage response = await client.GetAsync(requestUri);
-
-				var content = await response.Content.ReadAsStringAsync();
-				var result = JsonConvert.DeserializeObject<Measurement>(content);
-				return result;
+				string content = await response.Content.ReadAsStringAsync();
+				return JsonConvert.DeserializeObject<Measurement>(content);
 			}
 		}
 
 		/// <summary>
 		/// Send a request for nearest airly station based on the latitude and longitude.
 		/// </summary>
+		/// <param name="id">Current user's location.</param>
+		/// <param name="maxResults">The maximum amount of stations.</param>
 		public async Task<IEnumerable<Station>> GetNearestData(Location location, string maxResults = "1")
 		{
-			using (HttpClient client = new HttpClient())
+			using (HttpClient client = GetHttpClient())
 			{
-				Dictionary<string, string> queryString = new Dictionary<string, string>()
-				{  { "lat", location.Latitude.ToString() },  { "lng", location.Longitude.ToString() }, { "maxResults", maxResults} };
+				Dictionary<string, string> queryString = new Dictionary<string, string>() { { "lat", location.Latitude.ToString() }, { "lng", location.Longitude.ToString() }, { "maxResults", maxResults } };
 
-				client.BaseAddress = new Uri(App.ApiUrl);
+				string uri = CreateURI(App.ApiNearestUrl, queryString);
+				HttpResponseMessage response = await client.GetAsync(uri);
 
-				string requestUri = QueryHelpers.AddQueryString(App.ApiNearestUrl, queryString);
-
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-				client.DefaultRequestHeaders.Add("apikey", App.ApiKey);
-
-				HttpResponseMessage response = await client.GetAsync(requestUri);
-
-				var content = await response.Content.ReadAsStringAsync();
-				var result = JsonConvert.DeserializeObject<IEnumerable<Station>>(content);
-				return result;
+				string content = await response.Content.ReadAsStringAsync();
+				return JsonConvert.DeserializeObject<IEnumerable<Station>>(content);
 			}
+		}
+
+		/// <summary>
+		/// Create a base HtppClient with autharization header set.
+		/// </summary>
+		private HttpClient GetHttpClient()
+		{
+			HttpClient client = new HttpClient();
+
+			client.DefaultRequestHeaders.Accept.Clear();
+			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			client.DefaultRequestHeaders.Add("apikey", App.ApiKey);
+
+			return client;
+		}
+
+		/// <summary>
+		/// Create URI based on the endpoint and queries specified.
+		/// </summary>
+		/// <param name="endpoint">Endpoint of the Airly Developer.</param>
+		/// <param name="queries">Parameters required for the endpoint.</param>
+		private string CreateURI(string endpoint, Dictionary<string, string> queries)
+		{
+			UriBuilder uri = new UriBuilder(App.ApiUrl);
+			uri.Path += endpoint;
+			uri.Port = -1;
+			return QueryHelpers.AddQueryString(uri.ToString(), queries);
 		}
 	}
 }
