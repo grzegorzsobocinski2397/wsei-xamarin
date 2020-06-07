@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -15,22 +16,28 @@ namespace AirMonitor.Services
 	/// </summary>
 	public class AirlyDataService
 	{
+		#region Public Properties
+
+		/// <summary>
+		/// Number of requests left for current day.
+		/// </summary>
+		public int RequestsCount { get; private set; }
+
+		#endregion Public Properties
+
+		#region Public Methods
+
 		/// <summary>
 		/// Send a request for measurements for a specific station.
 		/// </summary>
 		/// <param name="id">Id of the station.</param>
 		public async Task<Measurement> GetMeasurements(string id)
 		{
-			using (HttpClient client = GetHttpClient())
-			{
-				Dictionary<string, string> queryString = new Dictionary<string, string>() { { "installationId", id } };
+			Dictionary<string, string> queryString = new Dictionary<string, string>() { { "installationId", id } };
 
-				string uri = CreateURI(App.ApiMeasurementsUrl, queryString);
-				HttpResponseMessage response = await client.GetAsync(uri);
+			string uri = CreateURI(App.ApiMeasurementsUrl, queryString);
 
-				string content = await response.Content.ReadAsStringAsync();
-				return JsonConvert.DeserializeObject<Measurement>(content);
-			}
+			return await SendRequest<Measurement>(uri);
 		}
 
 		/// <summary>
@@ -40,16 +47,41 @@ namespace AirMonitor.Services
 		/// <param name="maxResults">The maximum amount of stations.</param>
 		public async Task<IEnumerable<Station>> GetNearestData(Location location, string maxResults = "1")
 		{
+			Dictionary<string, string> queryString = new Dictionary<string, string>() { { "lat", location.Latitude.ToString() }, { "lng", location.Longitude.ToString() }, { "maxResults", maxResults } };
+
+			string uri = CreateURI(App.ApiNearestUrl, queryString);
+
+			return await SendRequest<IEnumerable<Station>>(uri);
+		}
+
+		#endregion Public Methods
+
+		#region Private Methods
+
+		/// <summary>
+		/// Send a request to Airly endpoints and deserialize the response.
+		/// </summary>
+		/// <typeparam name="T">Type of the endpoint response.</typeparam>
+		/// <param name="uri">Address to the Airly endpoint with params specified.</param>
+		private async Task<T> SendRequest<T>(string uri)
+		{
 			using (HttpClient client = GetHttpClient())
 			{
-				Dictionary<string, string> queryString = new Dictionary<string, string>() { { "lat", location.Latitude.ToString() }, { "lng", location.Longitude.ToString() }, { "maxResults", maxResults } };
-
-				string uri = CreateURI(App.ApiNearestUrl, queryString);
 				HttpResponseMessage response = await client.GetAsync(uri);
-
+				LogRequestsLeft(response.Headers);
 				string content = await response.Content.ReadAsStringAsync();
-				return JsonConvert.DeserializeObject<IEnumerable<Station>>(content);
+				return JsonConvert.DeserializeObject<T>(content);
 			}
+		}
+
+		/// <summary>
+		/// Save the information about requests left for a day.
+		/// </summary>
+		private void LogRequestsLeft(HttpResponseHeaders headers)
+		{
+			headers.TryGetValues("X-RateLimit-Remaining-day", out var limits);
+			RequestsCount = int.Parse(limits.FirstOrDefault());
+			System.Diagnostics.Debug.WriteLine($"Requests left: {RequestsCount}");
 		}
 
 		/// <summary>
@@ -78,5 +110,7 @@ namespace AirMonitor.Services
 			uri.Port = -1;
 			return QueryHelpers.AddQueryString(uri.ToString(), queries);
 		}
+
+		#endregion Private Methods
 	}
 }
