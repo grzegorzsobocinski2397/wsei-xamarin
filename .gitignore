@@ -192,4 +192,5 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 
-.vscode/settings.jsonAirMonitor/AirMonitor/config.json
+.vscode/settings.json
+AirMonitor/AirMonitor/config.json
