@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AirMonitor.Models
 {
+	/// <summary>
+	/// Contains measurement for given time period.
+	/// </summary>
 	public struct MeasurementItem
 	{
 		public DateTime FromDateTime { get; set; }

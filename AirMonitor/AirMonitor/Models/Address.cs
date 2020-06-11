@@ -1,8 +1,8 @@
 ﻿namespace AirMonitor.Models
 {
-    /// <summary>
-    /// Represents the Airly response for nearest station address.
-    /// </summary>
+	/// <summary>
+	/// Represents the Airly response for nearest station address.
+	/// </summary>
 	public struct Address
 	{
 		public string Country { get; set; }

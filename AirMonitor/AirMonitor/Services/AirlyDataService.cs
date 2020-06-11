@@ -47,6 +47,12 @@ namespace AirMonitor.Services
 		/// <param name="maxResults">The maximum amount of stations.</param>
 		public async Task<IEnumerable<Station>> GetNearestData(Location location, string maxResults = "1")
 		{
+			if (location == null)
+			{
+				System.Diagnostics.Debug.WriteLine("Location not found.");
+				return null;
+			}
+
 			Dictionary<string, string> queryString = new Dictionary<string, string>() { { "lat", location.Latitude.ToString() }, { "lng", location.Longitude.ToString() }, { "maxResults", maxResults } };
 
 			string uri = CreateURI(App.ApiNearestUrl, queryString);
@@ -67,10 +73,41 @@ namespace AirMonitor.Services
 		{
 			using (HttpClient client = GetHttpClient())
 			{
-				HttpResponseMessage response = await client.GetAsync(uri);
-				LogRequestsLeft(response.Headers);
-				string content = await response.Content.ReadAsStringAsync();
-				return JsonConvert.DeserializeObject<T>(content);
+				try
+				{
+					HttpResponseMessage response = await client.GetAsync(uri);
+					LogRequestsLeft(response.Headers);
+
+					switch ((int)response.StatusCode)
+					{
+						case 200:
+							string content = await response.Content.ReadAsStringAsync();
+							return JsonConvert.DeserializeObject<T>(content);
+
+						case 429:
+							System.Diagnostics.Debug.WriteLine("Hit daily limit for requests.");
+							break;
+
+						default:
+							string errorContent = await response.Content.ReadAsStringAsync();
+							System.Diagnostics.Debug.WriteLine($"Error: {errorContent}");
+							return default;
+					}
+				}
+				catch (ArgumentNullException ane)
+				{
+					System.Diagnostics.Debug.WriteLine(ane.Message);
+				}
+				catch (HttpRequestException hre)
+				{
+					System.Diagnostics.Debug.WriteLine(hre.Message);
+				}
+				catch (Exception ex)
+				{
+					System.Diagnostics.Debug.WriteLine(ex.Message);
+				}
+
+				return default;
 			}
 		}
 
@@ -80,8 +117,15 @@ namespace AirMonitor.Services
 		private void LogRequestsLeft(HttpResponseHeaders headers)
 		{
 			headers.TryGetValues("X-RateLimit-Remaining-day", out var limits);
-			RequestsCount = int.Parse(limits.FirstOrDefault());
-			System.Diagnostics.Debug.WriteLine($"Requests left: {RequestsCount}");
+			try
+			{
+				RequestsCount = int.Parse(limits.FirstOrDefault());
+				System.Diagnostics.Debug.WriteLine($"Requests left: {RequestsCount}");
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Debug.WriteLine($"Error during reading X-RateLimit header. ${ex.Message}");
+			}
 		}
 
 		/// <summary>

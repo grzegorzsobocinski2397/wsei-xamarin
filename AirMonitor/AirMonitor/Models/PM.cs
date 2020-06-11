@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AirMonitor.Models
+﻿namespace AirMonitor.Models
 {
-	class PM
+	/// <summary>
+	/// PM Measurement representation.
+	/// </summary>
+	public struct PM
 	{
 		public int Value { get; set; }
 		public int Percentage { get; set; }
