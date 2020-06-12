@@ -13,6 +13,11 @@ namespace AirMonitor.ViewModels
 		#region Properties
 
 		/// <summary>
+		/// Whether the application is currently loading data.
+		/// </summary>
+		public bool IsLoading { get;  private set; }
+
+		/// <summary>
 		/// List of measurements for nearby stations.
 		/// </summary>
 		public List<Measurement> Measurements { get; private set; }
@@ -59,10 +64,14 @@ namespace AirMonitor.ViewModels
 		/// </summary>
 		private async void Initialize()
 		{
+			IsLoading = true;
+
 			Location location = await GetLocation();
-			IEnumerable<Station> stations = await GetStations(location);
+			IEnumerable<Installation> stations = await GetStations(location);
 			IEnumerable<Measurement> measurements = await GetMeasurements(stations);
 			Measurements = new List<Measurement>(measurements);
+
+			IsLoading = false;
 		}
 
 		/// <summary>
