@@ -8,7 +8,7 @@ namespace AirMonitor.Models
 	/// <summary>
 	/// Representation of an airly station.
 	/// </summary>
-	public struct Station
+	public struct Installation
 	{
 		public string Id { get; set; }
 		public Location Location { get; set; }

@@ -8,7 +8,7 @@ namespace AirMonitor
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double percentage = (double)value * 100;
+            int percentage = (int)value;
             return $"{percentage}%";
         }
 

@@ -13,8 +13,8 @@ namespace AirMonitor.ViewModels
 		public int Caqi { get; set; }
 		public string CaqiDescription { get; set; }
 		public string CaqiLabel { get; set; }
-		public double MoistureLevel { get; set; }
-		public int PressureLevel { get; set; }
+		public int HumidityLevel { get; set; } = 0;
+		public int PressureLevel { get; set; } = 0;
 		public Measurement Measurement { set { AssignMeasurement(value); } }
 
 		#endregion Properties
@@ -34,12 +34,12 @@ namespace AirMonitor.ViewModels
 			PM10 = GetPM("PM10", current);
 			PM25 = GetPM("PM25", current);
 
-			Caqi = (int)Math.Round(index.Value);
+			Caqi = Convert.ToInt32(Math.Round(index.Value));
 			CaqiLabel = index.Description;
 			CaqiDescription = index.Advice;
 
-			MoistureLevel = (int)Math.Round(values.FirstOrDefault(value => value.Name == "HUMIDITY").Value);
-			PressureLevel = (int)Math.Round(values.FirstOrDefault(value => value.Name == "PRESSURE").Value);
+			HumidityLevel = Convert.ToInt32(Math.Round(values.FirstOrDefault(value => value.Name == "HUMIDITY").Value));
+			PressureLevel = Convert.ToInt32(Math.Round(values.FirstOrDefault(value => value.Name == "PRESSURE").Value)); 
 		}
 
 		#endregion Public Methods

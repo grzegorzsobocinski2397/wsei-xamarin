@@ -89,9 +89,11 @@
                 <controls:ContentWithHeader Title="Wilgotność">
                     <controls:ContentWithHeader.ControlContent>
                         <StackLayout>
-                            <Label Text="{Binding MoistureLevel, Converter={local:NumberToPercentageConverter}}" />
+                            <Label Text="{Binding HumidityLevel, Converter={local:NumberToPercentageConverter}}" />
                             <Slider
-                                Value="{Binding MoistureLevel}"
+                                Value="{Binding HumidityLevel}"
+                                Maximum="100"
+                                Minimum="0"
                                Style="{StaticResource SliderElement}" />
                         </StackLayout>
                     </controls:ContentWithHeader.ControlContent>
@@ -102,7 +104,6 @@
                     <controls:ContentWithHeader.ControlContent>
                         <StackLayout>
                             <Label Text="{Binding PressureLevel, StringFormat='{0} hPa'}" />
-                            <!-- Set Maximum before Minimum in Slider -->
                             <Slider
                                 Maximum="1100"
                                 Minimum="900"

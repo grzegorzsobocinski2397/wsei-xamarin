@@ -12,5 +12,6 @@ namespace AirMonitor.Models
 		public MeasurementValue[] Values { get; set; }
 		public AirQualityIndex[] Indexes { get; set; }
 		public AirQualityStandard[] Standards { get; set; }
+		public int FirstOrDefault { get; internal set; }
 	}
 }

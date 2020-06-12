@@ -1,7 +1,9 @@
 ﻿using AirMonitor.Models;
 using AirMonitor.Services;
 using AirMonitor.Views;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -86,7 +88,7 @@ namespace AirMonitor.ViewModels
 		/// Send a request to Airly for nearest stations.
 		/// </summary>
 		/// <param name="location">Current user's location</param>
-		private async Task<IEnumerable<Station>> GetStations(Location location)
+		private async Task<IEnumerable<Installation>> GetStations(Location location)
 		{
 			return await airlyDataService.GetNearestData(location);
 		}
@@ -95,13 +97,15 @@ namespace AirMonitor.ViewModels
 		/// Get the measurements for available stations.
 		/// </summary>
 		/// <param name="stations">Stations near the user's location.</param>
-		private async Task<IEnumerable<Measurement>> GetMeasurements(IEnumerable<Station> stations)
+		private async Task<IEnumerable<Measurement>> GetMeasurements(IEnumerable<Installation> stations)
 		{
 			List<Measurement> measurements = new List<Measurement>();
 
-			foreach (Station station in stations)
+			foreach (Installation station in stations)
 			{
 				Measurement measurement = await airlyDataService.GetMeasurements(station.Id);
+				measurement.Installation = station;
+				measurement.CurrentDisplayValue = Convert.ToInt32(Math.Round(measurement.Current.Indexes.FirstOrDefault().Value));
 
 				measurements.Add(measurement);
 			}

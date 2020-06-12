@@ -45,7 +45,7 @@ namespace AirMonitor.Services
 		/// </summary>
 		/// <param name="id">Current user's location.</param>
 		/// <param name="maxResults">The maximum amount of stations.</param>
-		public async Task<IEnumerable<Station>> GetNearestData(Location location, string maxResults = "1")
+		public async Task<IEnumerable<Installation>> GetNearestData(Location location, string maxResults = "1")
 		{
 			if (location == null)
 			{
@@ -57,7 +57,7 @@ namespace AirMonitor.Services
 
 			string uri = CreateURI(App.ApiNearestUrl, queryString);
 
-			return await SendRequest<IEnumerable<Station>>(uri);
+			return await SendRequest<IEnumerable<Installation>>(uri);
 		}
 
 		#endregion Public Methods
