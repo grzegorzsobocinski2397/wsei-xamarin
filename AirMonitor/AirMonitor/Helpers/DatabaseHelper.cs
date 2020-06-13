@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using SQLite;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace AirMonitor.Helpers
@@ -11,7 +10,7 @@ namespace AirMonitor.Helpers
 	/// <summary>
 	/// Helper for the SQLite database. Used for writing/reading data.
 	/// </summary>
-	public class DatabaseHelper
+	public class DatabaseHelper : IDisposable
 	{
 		#region Private Fields
 
@@ -19,6 +18,11 @@ namespace AirMonitor.Helpers
 		/// Representation of SQLite database with basic options like path or name.
 		/// </summary>
 		private Database Database { get; set; }
+
+		/// <summary>
+		/// Name of the database on the device.
+		/// </summary>
+		private const string DATABASE_NAME = "AirlyDB";
 
 		/// <summary>
 		/// Connection to the database.
@@ -29,15 +33,27 @@ namespace AirMonitor.Helpers
 
 		#region Constructor
 
+		/// <summary>
+		/// Establish connection to the database.
+		/// </summary>
 		public DatabaseHelper()
 		{
-			Database = new Database("AirlyDB");
+			Database = new Database(DATABASE_NAME);
 			InitializeDatabase();
 		}
 
 		#endregion Constructor
 
 		#region Public Methods
+
+		/// <summary>
+		/// Dispose of the connection to the database.
+		/// </summary>
+		public void Dispose()
+		{
+			DBConnection.Dispose();
+			DBConnection = null;
+		}
 
 		/// <summary>
 		/// Map the existing installations and save them in the database. Erase all table data before.
@@ -157,9 +173,10 @@ namespace AirMonitor.Helpers
 			JArray indexesArray = JArray.Parse(measurementCurrentEntity.Indexes);
 			JArray standardsArray = JArray.Parse(measurementCurrentEntity.Standards);
 
-			int[] valuesIds = DeserializeJsonToIntArray(valuesArray, "Id");
-			int[] indexesIds = DeserializeJsonToIntArray(indexesArray, "Id");
-			int[] standardsIds = DeserializeJsonToIntArray(standardsArray, "Id");
+			string ID_COLUMN = "Id";
+			int[] valuesIds = DeserializeJsonToIntArray(valuesArray, ID_COLUMN);
+			int[] indexesIds = DeserializeJsonToIntArray(indexesArray, ID_COLUMN);
+			int[] standardsIds = DeserializeJsonToIntArray(standardsArray, ID_COLUMN);
 
 			MeasurementValue[] measurementValues = DBConnection.Table<MeasurementValue>().Where(v => valuesIds.Contains(v.Id)).ToArray();
 			AirQualityIndex[] measurementIndexes = DBConnection.Table<AirQualityIndex>().Where(i => indexesIds.Contains(i.Id)).ToArray();

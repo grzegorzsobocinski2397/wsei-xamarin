@@ -62,7 +62,7 @@ namespace AirMonitor.ViewModels
 		#region Private Methods
 
 		/// <summary>
-		/// Send requests to Airly endpoints with current location.
+		/// Send requests to Airly endpoints with current location or read data from database.
 		/// </summary>
 		private async void Initialize()
 		{
