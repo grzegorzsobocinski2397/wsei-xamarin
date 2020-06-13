@@ -17,7 +17,7 @@ namespace AirMonitor.ViewModels
 		/// <summary>
 		/// Whether the application is currently loading data.
 		/// </summary>
-		public bool IsLoading { get; private set; }
+		public bool IsLoading { get; private set; } = true;
 
 		/// <summary>
 		/// List of measurements for nearby stations.
@@ -62,7 +62,7 @@ namespace AirMonitor.ViewModels
 		#region Private Methods
 
 		/// <summary>
-		/// Send requests to Airly endpoints with current location or read data from database.
+		/// Send requests to Airly endpoints with current location or read data from database .
 		/// </summary>
 		private async void Initialize()
 		{
@@ -70,11 +70,11 @@ namespace AirMonitor.ViewModels
 
 			if (App.DatabaseHelper.IsDataValid())
 			{
-				Measurements = App.DatabaseHelper.ReadMeasurements().ToList();
+				await Task.Run(() => Measurements = App.DatabaseHelper.ReadMeasurements().ToList());
 			}
 			else
 			{
-				await RequestData();
+				await Task.Run(() => RequestData());
 			}
 
 			IsLoading = false;
