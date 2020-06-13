@@ -11,11 +11,17 @@ namespace AirMonitor.Helpers
 	{
 		#region Private Fields
 
+		/// <summary>
+		/// Representation of SQLite database with basic options like path or name.
+		/// </summary>
 		private Database Database { get; set; }
 
-		#endregion Private Fields
-
+		/// <summary>
+		/// Connection to the database.
+		/// </summary>
 		private SQLiteConnection DBConnection { get; set; }
+
+		#endregion Private Fields
 
 		#region Constructor
 
@@ -78,6 +84,22 @@ namespace AirMonitor.Helpers
 					DBConnection.Insert(measurementEntity);
 				}
 			});
+		}
+
+		/// <summary>
+		/// Read the database for installation entities, map them and return.
+		/// </summary>
+		public IEnumerable<Installation> ReadInstallations()
+		{
+			List<InstallationEntity> installationEnitities = DBConnection.Table<InstallationEntity>().ToList();
+			List<Installation> installations = new List<Installation>();
+
+			foreach (InstallationEntity installationEntity in installationEnitities)
+			{
+				installations.Add(new Installation(installationEntity));
+			}
+
+			return installations;
 		}
 
 		#endregion Public Methods
