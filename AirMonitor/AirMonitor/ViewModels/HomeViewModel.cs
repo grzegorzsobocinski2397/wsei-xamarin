@@ -17,7 +17,7 @@ namespace AirMonitor.ViewModels
 		/// <summary>
 		/// Whether the application is currently loading data.
 		/// </summary>
-		public bool IsLoading { get;  private set; }
+		public bool IsLoading { get; private set; }
 
 		/// <summary>
 		/// List of measurements for nearby stations.
@@ -68,16 +68,27 @@ namespace AirMonitor.ViewModels
 		{
 			IsLoading = true;
 
-			Location location = await GetLocation();
+			if (App.DatabaseHelper.IsDataValid())
+			{
+				Measurements = App.DatabaseHelper.ReadMeasurements().ToList();
+			}
+			else
+			{
+				await RequestData();
+			}
 
+			IsLoading = false;
+		}
+
+		private async Task RequestData()
+		{
+			Location location = await GetLocation();
 			IEnumerable<Installation> stations = await GetStations(location);
 			App.DatabaseHelper.SaveInstallations(stations);
 
 			IEnumerable<Measurement> measurements = await GetMeasurements(stations);
 			Measurements = new List<Measurement>(measurements);
 			App.DatabaseHelper.SaveMeasurements(Measurements);
-
-			IsLoading = false;
 		}
 
 		/// <summary>

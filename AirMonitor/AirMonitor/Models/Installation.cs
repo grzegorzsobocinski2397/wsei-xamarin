@@ -18,6 +18,10 @@ namespace AirMonitor.Models
 		#endregion Public Properties
 
 		#region Constructor
+		public Installation()
+		{
+
+		}
 
 		/// <summary>
 		/// Deserialize entity from the SQLite database.

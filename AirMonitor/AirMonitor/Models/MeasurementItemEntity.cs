@@ -26,6 +26,10 @@ namespace AirMonitor.Models
 
 		#region Constructor
 
+		public MeasurementItemEntity()
+		{
+		}
+
 		public MeasurementItemEntity(MeasurementItem measurementItem)
 		{
 			FromDateTime = measurementItem.FromDateTime;

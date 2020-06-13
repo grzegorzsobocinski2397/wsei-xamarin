@@ -37,7 +37,7 @@ namespace AirMonitor.Models
 		public Database(string name)
 		{
 			Name = name;
-			Directory = Environment.CurrentDirectory;
+			Directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			Path = System.IO.Path.Combine(Directory, name);
 		}
 

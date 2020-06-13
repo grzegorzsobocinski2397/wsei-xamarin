@@ -18,6 +18,10 @@ namespace AirMonitor.Models
 
 		#region Constructor
 
+		public MeasurementEntity()
+		{
+		}
+
 		public MeasurementEntity(Measurement measurement, MeasurementItemEntity current)
 		{
 			CurrentId = current.Id;

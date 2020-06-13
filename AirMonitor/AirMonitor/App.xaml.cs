@@ -38,11 +38,11 @@ namespace AirMonitor
 
 		public App()
 		{
+			DatabaseHelper = new DatabaseHelper();
+
 			InitializeComponent();
 
 			InitializeApp();
-
-			DatabaseHelper = new DatabaseHelper();
 		}
 
 		/// <summary>
