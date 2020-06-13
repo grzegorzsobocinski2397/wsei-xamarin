@@ -35,7 +35,7 @@ namespace AirMonitor.Services
 		{
 			Dictionary<string, string> queryString = new Dictionary<string, string>() { { "installationId", id } };
 
-			string uri = CreateURI(App.ApiMeasurementsUrl, queryString);
+			string uri = CreateURI(App.ApiHelper.ApiMeasurementsUrl, queryString);
 
 			return await SendRequest<Measurement>(uri);
 		}
@@ -45,7 +45,7 @@ namespace AirMonitor.Services
 		/// </summary>
 		/// <param name="id">Current user's location.</param>
 		/// <param name="maxResults">The maximum amount of stations.</param>
-		public async Task<IEnumerable<Installation>> GetNearestData(Location location, string maxResults = "1")
+		public async Task<IEnumerable<Installation>> GetNearestData(Location location, string maxResults = "3")
 		{
 			if (location == null)
 			{
@@ -55,7 +55,7 @@ namespace AirMonitor.Services
 
 			Dictionary<string, string> queryString = new Dictionary<string, string>() { { "lat", location.Latitude.ToString() }, { "lng", location.Longitude.ToString() }, { "maxResults", maxResults } };
 
-			string uri = CreateURI(App.ApiNearestUrl, queryString);
+			string uri = CreateURI(App.ApiHelper.ApiNearestUrl, queryString);
 
 			return await SendRequest<IEnumerable<Installation>>(uri);
 		}
@@ -137,7 +137,7 @@ namespace AirMonitor.Services
 
 			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-			client.DefaultRequestHeaders.Add("apikey", App.ApiKey);
+			client.DefaultRequestHeaders.Add("apikey", App.ApiHelper.ApiKey);
 
 			return client;
 		}
@@ -149,7 +149,7 @@ namespace AirMonitor.Services
 		/// <param name="queries">Parameters required for the endpoint.</param>
 		private string CreateURI(string endpoint, Dictionary<string, string> queries)
 		{
-			UriBuilder uri = new UriBuilder(App.ApiUrl);
+			UriBuilder uri = new UriBuilder(App.ApiHelper.ApiUrl);
 			uri.Path += endpoint;
 			uri.Port = -1;
 			return QueryHelpers.AddQueryString(uri.ToString(), queries);

@@ -1,9 +1,5 @@
 ﻿using AirMonitor.Helpers;
 using AirMonitor.Views;
-using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -12,24 +8,9 @@ namespace AirMonitor
 	public partial class App : Application
 	{
 		/// <summary>
-		/// API key to the Airly endpoint. Provided in the config.json
+		/// Helper that reads the configuration file for Airly API keys and endpoints.
 		/// </summary>
-		public static string ApiKey { get; private set; }
-
-		/// <summary>
-		/// URL exposed for the developers by Airly team. Provided in the config.json
-		/// </summary>
-		public static string ApiUrl { get; private set; }
-
-		/// <summary>
-		/// Endpoint for the nearest station. Provided in the config.json
-		/// </summary>
-		public static string ApiNearestUrl { get; private set; }
-
-		/// <summary>
-		/// Endpoint for the measurements based on the station id. Provided in the config.json
-		/// </summary>
-		public static string ApiMeasurementsUrl { get; private set; }
+		public static ApiHelper ApiHelper { get; private set; }
 
 		/// <summary>
 		/// Helper that connects to the SQLite database.
@@ -39,6 +20,7 @@ namespace AirMonitor
 		public App()
 		{
 			DatabaseHelper = new DatabaseHelper();
+			ApiHelper = new ApiHelper();
 
 			InitializeComponent();
 
@@ -50,33 +32,9 @@ namespace AirMonitor
 		/// </summary>
 		private async Task InitializeApp()
 		{
-			await LoadConfig();
+			await ApiHelper.LoadConfig();
 
 			MainPage = new TabPage();
-		}
-
-		/// <summary>
-		/// Load the configuration with URLs.
-		/// </summary>
-		private static async Task LoadConfig()
-		{
-			Assembly assembly = Assembly.GetAssembly(typeof(App));
-			string[] resourceNames = assembly.GetManifestResourceNames();
-			string configName = resourceNames.FirstOrDefault(s => s.Contains("config.json"));
-
-			using (Stream stream = assembly.GetManifestResourceStream(configName))
-			{
-				using (StreamReader reader = new StreamReader(stream))
-				{
-					string json = await reader.ReadToEndAsync();
-					JObject dynamicJson = JObject.Parse(json);
-
-					ApiKey = dynamicJson["apiKey"].Value<string>();
-					ApiUrl = dynamicJson["apiUrl"].Value<string>();
-					ApiNearestUrl = dynamicJson["apiNearest"].Value<string>();
-					ApiMeasurementsUrl = dynamicJson["apiMeasurements"].Value<string>();
-				}
-			}
 		}
 
 		protected override void OnStart()

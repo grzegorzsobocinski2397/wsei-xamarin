@@ -133,6 +133,11 @@ namespace AirMonitor.ViewModels
 			foreach (Installation station in stations)
 			{
 				Measurement measurement = await airlyDataService.GetMeasurements(station.Id);
+				if (measurement == null)
+				{
+					continue;
+				}
+
 				measurement.Installation = station;
 				measurement.CurrentDisplayValue = Convert.ToInt32(Math.Round(measurement.Current.Indexes.FirstOrDefault().Value));
 
