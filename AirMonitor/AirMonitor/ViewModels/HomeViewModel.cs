@@ -69,7 +69,10 @@ namespace AirMonitor.ViewModels
 			IsLoading = true;
 
 			Location location = await GetLocation();
+
 			IEnumerable<Installation> stations = await GetStations(location);
+			App.DatabaseHelper.SaveInstallations(stations);
+
 			IEnumerable<Measurement> measurements = await GetMeasurements(stations);
 			Measurements = new List<Measurement>(measurements);
 

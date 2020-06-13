@@ -20,6 +20,18 @@
 		{
 		}
 
+		/// <summary>
+		/// Map the <see cref="Installation"/> to an entity applicable for SQLite database.
+		/// </summary>
+		/// <param name="installation"></param>
+		public InstallationEntity(Installation installation)
+		{
+			Id = installation.Id;
+			Location = installation.Location.ToString();
+			Address = installation.Address.ToString();
+			Elevation = installation.Elevation;
+		}
+
 		#endregion Constructor
 	}
 }

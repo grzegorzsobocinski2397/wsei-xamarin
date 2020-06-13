@@ -1,5 +1,7 @@
 ﻿using AirMonitor.Models;
 using SQLite;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace AirMonitor.Helpers
 {
@@ -26,7 +28,33 @@ namespace AirMonitor.Helpers
 
 		#endregion Constructor
 
+		#region Public Methods
+		/// <summary>
+		/// Map the existing installations and save them in the database. Erase all table data before.
+		/// </summary>
+		/// <param name="installations">Current installations of Airly sensors.</param>
+		public void SaveInstallations(IEnumerable<Installation> installations)
+		{
+			List<InstallationEntity> installationEntities = new List<InstallationEntity>();
+
+			foreach (Installation installation in installations)
+			{
+				InstallationEntity installationEnitity = new InstallationEntity(installation);
+				installationEntities.Add(installationEnitity);
+			}
+
+
+			DBConnection.RunInTransaction(() =>
+			{
+				DBConnection.DeleteAll<InstallationEntity>();
+				DBConnection.InsertAll(installationEntities);
+			}
+			);
+		}
+		#endregion
+
 		#region Private Methods
+
 		/// <summary>
 		/// Connect to database and create tables.
 		/// </summary>
