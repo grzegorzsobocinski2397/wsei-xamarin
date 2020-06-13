@@ -1,6 +1,5 @@
 ﻿using AirMonitor.Models;
 using SQLite;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace AirMonitor.Helpers
@@ -29,6 +28,7 @@ namespace AirMonitor.Helpers
 		#endregion Constructor
 
 		#region Public Methods
+
 		/// <summary>
 		/// Map the existing installations and save them in the database. Erase all table data before.
 		/// </summary>
@@ -43,7 +43,6 @@ namespace AirMonitor.Helpers
 				installationEntities.Add(installationEnitity);
 			}
 
-
 			DBConnection.RunInTransaction(() =>
 			{
 				DBConnection.DeleteAll<InstallationEntity>();
@@ -51,7 +50,37 @@ namespace AirMonitor.Helpers
 			}
 			);
 		}
-		#endregion
+
+		/// <summary>
+		/// Map the measurements into entites and write them into the database. Wipe data before.
+		/// </summary>
+		/// <param name="measurements"></param>
+		public void SaveMeasurements(IEnumerable<Measurement> measurements)
+		{
+			DBConnection.RunInTransaction(() =>
+			{
+				DBConnection.DeleteAll<MeasurementEntity>();
+				DBConnection.DeleteAll<MeasurementItemEntity>();
+				DBConnection.DeleteAll<MeasurementValue>();
+				DBConnection.DeleteAll<AirQualityIndex>();
+				DBConnection.DeleteAll<AirQualityStandard>();
+
+				foreach (Measurement measurement in measurements)
+				{
+					DBConnection.InsertAll(measurement.Current.Values, false);
+					DBConnection.InsertAll(measurement.Current.Indexes, false);
+					DBConnection.InsertAll(measurement.Current.Standards, false);
+
+					MeasurementItemEntity measurementCurrentEntity = new MeasurementItemEntity(measurement.Current);
+					DBConnection.Insert(measurementCurrentEntity);
+
+					MeasurementEntity measurementEntity = new MeasurementEntity(measurement, measurementCurrentEntity);
+					DBConnection.Insert(measurementEntity);
+				}
+			});
+		}
+
+		#endregion Public Methods
 
 		#region Private Methods
 

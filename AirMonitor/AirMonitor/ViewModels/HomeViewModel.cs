@@ -75,6 +75,7 @@ namespace AirMonitor.ViewModels
 
 			IEnumerable<Measurement> measurements = await GetMeasurements(stations);
 			Measurements = new List<Measurement>(measurements);
+			App.DatabaseHelper.SaveMeasurements(Measurements);
 
 			IsLoading = false;
 		}

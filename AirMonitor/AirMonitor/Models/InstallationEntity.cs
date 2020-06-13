@@ -1,4 +1,6 @@
-﻿namespace AirMonitor.Models
+﻿using Newtonsoft.Json;
+
+namespace AirMonitor.Models
 {
 	/// <summary>
 	/// Model for the SQLite database.
@@ -27,8 +29,8 @@
 		public InstallationEntity(Installation installation)
 		{
 			Id = installation.Id;
-			Location = installation.Location.ToString();
-			Address = installation.Address.ToString();
+			Location = JsonConvert.SerializeObject(installation.Location);
+			Address = JsonConvert.SerializeObject(installation.Address);
 			Elevation = installation.Elevation;
 		}
 

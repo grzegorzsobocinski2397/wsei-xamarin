@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using SQLite;
 using System;
 
 namespace AirMonitor.Models
@@ -25,8 +26,14 @@ namespace AirMonitor.Models
 
 		#region Constructor
 
-		public MeasurementItemEntity()
+		public MeasurementItemEntity(MeasurementItem measurementItem)
 		{
+			FromDateTime = measurementItem.FromDateTime;
+			TillDateTime = measurementItem.TillDateTime;
+			Values = JsonConvert.SerializeObject(measurementItem.Values);
+			Indexes = JsonConvert.SerializeObject(measurementItem.Indexes);
+			Standards = JsonConvert.SerializeObject(measurementItem.Standards);
+			FirstOrDefault = measurementItem.FirstOrDefault;
 		}
 
 		#endregion Constructor
