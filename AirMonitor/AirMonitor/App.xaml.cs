@@ -1,4 +1,4 @@
-﻿using AirMonitor.Services;
+﻿using AirMonitor.Helpers;
 using AirMonitor.Views;
 using Newtonsoft.Json.Linq;
 using System.IO;
@@ -25,16 +25,24 @@ namespace AirMonitor
 		/// Endpoint for the nearest station. Provided in the config.json
 		/// </summary>
 		public static string ApiNearestUrl { get; private set; }
+
 		/// <summary>
 		/// Endpoint for the measurements based on the station id. Provided in the config.json
 		/// </summary>
 		public static string ApiMeasurementsUrl { get; private set; }
+
+		/// <summary>
+		/// Helper that connects to the SQLite database.
+		/// </summary>
+		public static DatabaseHelper DatabaseHelper { get; private set; }
 
 		public App()
 		{
 			InitializeComponent();
 
 			InitializeApp();
+
+			DatabaseHelper = new DatabaseHelper();
 		}
 
 		/// <summary>
