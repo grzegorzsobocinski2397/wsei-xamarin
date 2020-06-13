@@ -1,10 +1,12 @@
 ﻿using AirMonitor.Models;
 using AirMonitor.Services;
+using AirMonitor.ViewModels.Base;
 using AirMonitor.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -20,9 +22,19 @@ namespace AirMonitor.ViewModels
 		public bool IsLoading { get; private set; } = true;
 
 		/// <summary>
+		/// Whether the application is requesting/reading new data after user had used refresh command.
+		/// </summary>
+		public bool IsRefreshing { get; private set; } = false;
+
+		/// <summary>
 		/// List of measurements for nearby stations.
 		/// </summary>
 		public List<Measurement> Measurements { get; private set; }
+
+		/// <summary>
+		/// Request new measurements.
+		/// </summary>
+		public ICommand RefreshMeasurementsCommand { get; set; }
 
 		/// <summary>
 		/// Service responsible for sending requests to Airly endpoints.
@@ -43,6 +55,8 @@ namespace AirMonitor.ViewModels
 			this.navigation = navigation;
 
 			Initialize();
+
+			RefreshMeasurementsCommand = new RelayCommand(async () => await RefreshData());
 		}
 
 		#endregion Constructor
@@ -126,6 +140,19 @@ namespace AirMonitor.ViewModels
 			}
 
 			return measurements;
+		}
+
+		/// <summary>
+		/// Request new data from the Airly endpoints.
+		/// </summary>
+		/// <returns></returns>
+		private async Task RefreshData()
+		{
+			IsRefreshing = true;
+
+			await Task.Run(() => RequestData());
+
+			IsRefreshing = false;
 		}
 
 		#endregion Private Methods
