@@ -1,10 +1,15 @@
-﻿namespace AirMonitor.Models
+﻿using SQLite;
+
+namespace AirMonitor.Models
 {
 	/// <summary>
 	/// Model of the air quality provided by the Airly team.
 	/// </summary>
 	public struct AirQualityIndex
 	{
+		[PrimaryKey]
+		[AutoIncrement]
+		public int Id { get; set; }
 		public string Name { get; set; }
 		public double Value { get; set; }
 		public string Level { get; set; }
