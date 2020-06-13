@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace AirMonitor.Models
 {
@@ -29,6 +31,7 @@ namespace AirMonitor.Models
 			History = JsonConvert.DeserializeObject<MeasurementItem[]>(measurement.History);
 			Forecast = JsonConvert.DeserializeObject<MeasurementItem[]>(measurement.Forecast);
 			Installation = installation;
+			CurrentDisplayValue = Convert.ToInt32(Math.Round(current.Indexes.FirstOrDefault().Value));
 		}
 
 		#endregion Constructor
