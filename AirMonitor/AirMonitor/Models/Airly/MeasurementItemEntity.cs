@@ -11,8 +11,7 @@ namespace AirMonitor.Models
 	{
 		#region Public Properties
 
-		[PrimaryKey]
-		[AutoIncrement]
+		[PrimaryKey, AutoIncrement]
 		public int Id { get; set; }
 
 		public DateTime FromDateTime { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SQLite;
 
 namespace AirMonitor.Models
 {
@@ -8,7 +9,7 @@ namespace AirMonitor.Models
 	public class InstallationEntity
 	{
 		#region Public Properties
-
+		[PrimaryKey]
 		public string Id { get; set; }
 		public string Location { get; set; }
 		public string Address { get; set; }
