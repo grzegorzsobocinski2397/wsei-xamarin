@@ -1,4 +1,5 @@
 ﻿using AirMonitor.Models;
+using AirMonitor.Models.Map;
 using AirMonitor.Services;
 using AirMonitor.ViewModels.Base;
 using AirMonitor.Views;
@@ -9,12 +10,18 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace AirMonitor.ViewModels
 {
 	internal class HomeViewModel : BaseViewModel
 	{
 		#region Properties
+
+		/// <summary>
+		/// Location of the stations on the map.
+		/// </summary>
+		public List<MapLocation> Locations { get; private set; }
 
 		/// <summary>
 		/// Whether the application is currently loading data.
@@ -36,6 +43,8 @@ namespace AirMonitor.ViewModels
 		/// </summary>
 		public ICommand RefreshMeasurementsCommand { get; set; }
 
+		public ICommand NavigatePinToDetialsCommand { get; set; }
+
 		/// <summary>
 		/// Service responsible for sending requests to Airly endpoints.
 		/// </summary>
@@ -45,6 +54,11 @@ namespace AirMonitor.ViewModels
 		/// Xamarin navigation.
 		/// </summary>
 		private readonly INavigation navigation;
+
+		/// <summary>
+		/// Current location of the user.
+		/// </summary>
+		private Location location;
 
 		#endregion Properties
 
@@ -57,6 +71,7 @@ namespace AirMonitor.ViewModels
 			Initialize();
 
 			RefreshMeasurementsCommand = new RelayCommand(async () => await RefreshData());
+			NavigatePinToDetialsCommand = new RelayParameterCommand((address) => NavigatePinToDetails((string)address));
 		}
 
 		#endregion Constructor
@@ -82,6 +97,8 @@ namespace AirMonitor.ViewModels
 		{
 			IsLoading = true;
 
+			location = await GetLocation();
+
 			if (App.DatabaseHelper.IsDataValid())
 			{
 				await Task.Run(() => Measurements = App.DatabaseHelper.ReadMeasurements().ToList());
@@ -92,17 +109,34 @@ namespace AirMonitor.ViewModels
 			}
 
 			IsLoading = false;
+			SaveLocationPins();
 		}
 
+		/// <summary>
+		/// Send requests for stations and their measurements.
+		/// </summary>
 		private async Task RequestData()
 		{
-			Location location = await GetLocation();
 			IEnumerable<Installation> stations = await GetStations(location);
 			App.DatabaseHelper.SaveInstallations(stations);
 
 			IEnumerable<Measurement> measurements = await GetMeasurements(stations);
 			Measurements = new List<Measurement>(measurements);
 			App.DatabaseHelper.SaveMeasurements(Measurements);
+		}
+
+		/// <summary>
+		/// Save the location of stations in form of pins on the map.
+		/// </summary>
+		private void SaveLocationPins()
+		{
+			Locations = Measurements.Select(m => new MapLocation
+			{
+				Address = m.Installation.Address.Description,
+				Description = "CAQI: " + m.CurrentDisplayValue,
+				Position = new Position(m.Installation.Location.Latitude, m.Installation.Location.Longitude),
+				InstallationId = m.Installation.Id
+			}).ToList();
 		}
 
 		/// <summary>
@@ -155,9 +189,22 @@ namespace AirMonitor.ViewModels
 		{
 			IsRefreshing = true;
 
+			location = await GetLocation();
+
 			await Task.Run(() => RequestData());
 
 			IsRefreshing = false;
+
+			SaveLocationPins();
+		}
+
+		/// <summary>
+		/// Move the user to Details Page.
+		/// </summary>
+		private void NavigatePinToDetails(string installationId)
+		{
+			Measurement measurement = Measurements.First(m => m.Installation.Id.Equals(installationId));
+			NavigateToDetailsPage(measurement);
 		}
 
 		#endregion Private Methods

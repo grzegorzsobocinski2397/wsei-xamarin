@@ -45,7 +45,7 @@ namespace AirMonitor.Services
 		/// </summary>
 		/// <param name="id">Current user's location.</param>
 		/// <param name="maxResults">The maximum amount of stations.</param>
-		public async Task<IEnumerable<Installation>> GetNearestData(Location location, string maxResults = "3")
+		public async Task<IEnumerable<Installation>> GetNearestData(Location location, string maxResults = "2" ,string maxDistanceKM = "10")
 		{
 			if (location == null)
 			{
@@ -53,7 +53,7 @@ namespace AirMonitor.Services
 				return null;
 			}
 
-			Dictionary<string, string> queryString = new Dictionary<string, string>() { { "lat", location.Latitude.ToString() }, { "lng", location.Longitude.ToString() }, { "maxResults", maxResults } };
+			Dictionary<string, string> queryString = new Dictionary<string, string>() { { "lat", location.Latitude.ToString() }, { "lng", location.Longitude.ToString() }, { "maxResults", maxResults }, { "maxDistanceKM", maxDistanceKM } };
 
 			string uri = CreateURI(App.ApiHelper.ApiNearestUrl, queryString);
 
